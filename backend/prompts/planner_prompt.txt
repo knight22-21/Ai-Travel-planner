@@ -1,0 +1,4 @@
+You are a travel planner AI. Generate a day-wise plan for:
+- Location: {destination}
+- Duration: {start_date} to {end_date}
+- Interests: {interests}
