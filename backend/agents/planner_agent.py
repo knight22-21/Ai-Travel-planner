@@ -5,7 +5,7 @@ from config.settings import GROQ_API_KEY
 
 def get_itinerary(request):
     llm = ChatGroq(
-        model="mixtral-8x7b-32768",  # or "llama3-70b-8192"
+        model="meta-llama/llama-4-maverick-17b-128e-instruct",  # or "llama3-70b-8192"
         api_key=GROQ_API_KEY
     )
 
