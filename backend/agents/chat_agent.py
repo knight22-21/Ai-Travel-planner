@@ -6,7 +6,7 @@ from config.settings import GROQ_API_KEY
 
 # 🔧 Core LLM
 llm = ChatGroq(
-    model="deepseek-r1-distill-llama-70b",
+    model="llama-3.1-8b-instant",
     api_key=GROQ_API_KEY,
     temperature=0.7
 )
