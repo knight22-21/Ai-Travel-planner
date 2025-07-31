@@ -30,4 +30,5 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest tests
+          export PYTHONPATH="${PYTHONPATH}:./backend"
+            pytest tests
