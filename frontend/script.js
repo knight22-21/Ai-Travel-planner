@@ -14,6 +14,10 @@ async function sendMessage() {
   // Add user message with timestamp
   appendMessage("user", message);
 
+  // Add loading indicator
+  const loaderId = "loading-" + Date.now();
+  appendMessage("guide", "Typing...", loaderId, true);
+
   try {
     const res = await fetch("/api/chat", {
       method: "POST",
@@ -25,9 +29,10 @@ async function sendMessage() {
 
     const data = await res.json();
 
-    appendMessage("guide", data.response);
+    // Replace loader with actual response
+    replaceMessage(loaderId, data.response);
   } catch (error) {
-    appendMessage("guide", "Sorry, something went wrong. Please try again.");
+    replaceMessage(loaderId, "❌ Sorry, something went wrong. Please try again.");
   } finally {
     input.disabled = false;
     sendBtn.disabled = false;
@@ -35,22 +40,53 @@ async function sendMessage() {
   }
 }
 
-// Helper function to append message bubbles
-function appendMessage(sender, text) {
+function appendMessage(sender, text, id = null, isLoading = false) {
   const chatBox = document.getElementById("chatBox");
   const messageElem = document.createElement("div");
   messageElem.classList.add("message", sender);
-  messageElem.innerText = text;
+  if (id) messageElem.id = id;
+
+  // Show loading animation if applicable
+  messageElem.innerHTML = isLoading
+   ? `<div class="dots"><span>.</span><span>.</span><span>.</span></div>`
+   : text;
+
 
   // Timestamp
-  const timeElem = document.createElement("div");
-  timeElem.classList.add("timestamp");
-  const now = new Date();
-  timeElem.innerText = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  if (!isLoading) {
+    const timeElem = document.createElement("div");
+    timeElem.classList.add("timestamp");
+    const now = new Date();
+    timeElem.innerText = now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    messageElem.appendChild(timeElem);
+  }
 
-  messageElem.appendChild(timeElem);
   chatBox.appendChild(messageElem);
-
-  // Scroll to bottom smoothly
   chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
 }
+
+// Replace loader with actual response
+function replaceMessage(id, newText) {
+  const messageElem = document.getElementById(id);
+  if (messageElem) {
+    messageElem.innerHTML = newText;
+
+    const timeElem = document.createElement("div");
+    timeElem.classList.add("timestamp");
+    const now = new Date();
+    timeElem.innerText = now.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    messageElem.appendChild(timeElem);
+  }
+}
+
+// Intro message
+window.onload = () => {
+  appendMessage("guide", "👋 Hi! I’m your AI Travel Guide. Tell me your travel plans.");
+};

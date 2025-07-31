@@ -21,6 +21,13 @@
       <button type="submit" id="sendBtn" aria-label="Send message">Send</button>
     </form>
   </div>
+
   <script src="script.js"></script>
+  <script>
+    // ✨ Introductory Message on Load
+    window.onload = () => {
+      appendMessage("guide", "👋 Hi! I’m your AI Travel Guide. Tell me your travel plans.");
+    };
+  </script>
 </body>
 </html>
