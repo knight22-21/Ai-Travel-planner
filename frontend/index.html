@@ -1,15 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Travel Chat</title>
+  <title>AI Travel Guide</title>
+
+  <!-- Travel-themed Favicon -->
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/201/201623.png" type="image/png">
+
+  <!-- CSS & Markdown Support -->
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
   <div id="chatContainer" role="main" aria-label="Travel Chat Interface">
+    
+    <!-- Stylish Heading -->
+    <header style="text-align: center; margin-bottom: 10px;">
+      <h1 style="margin: 0; font-size: 24px; color: #0077cc;">🌍 Your AI Travel Guide</h1>
+      <p style="margin: 4px 0 16px; color: #666;">Plan smarter. Explore better.</p>
+    </header>
+
+    <!-- Chat Box -->
     <div id="chatBox" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- Input Box -->
     <form id="inputBox" onsubmit="event.preventDefault(); sendMessage();">
       <input
         type="text"
@@ -23,9 +38,10 @@
     </form>
   </div>
 
+  <!-- JS -->
   <script src="script.js"></script>
   <script>
-    // ✨ Introductory Message on Load
+    // ✨ Intro Message on Load
     window.onload = () => {
       appendMessage("guide", "👋 Hi! I’m your AI Travel Guide. Tell me your travel plans.");
     };
