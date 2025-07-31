@@ -2,3 +2,5 @@ fastapi
 uvicorn
 langchain
 python-dotenv
+httpx
+pytest
