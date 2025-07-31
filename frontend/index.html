@@ -1,28 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>AI Travel Guide</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Travel Chat</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>AI Travel Guide</h1>
-
-  <form id="travelForm">
-    <input type="text" id="destination" placeholder="Destination" required />
-    <input type="date" id="start_date" required />
-    <input type="date" id="end_date" required />
-    <input type="text" id="interests" placeholder="Interests (e.g., food, nature)" required />
-    <button type="submit">Generate Plan</button>
-  </form>
-
-  <div id="results">
-    <h2>Itinerary</h2>
-    <p id="itinerary"></p>
-
-    <h2>Packing List</h2>
-    <p id="packing"></p>
+  <div id="chatContainer" role="main" aria-label="Travel Chat Interface">
+    <div id="chatBox" aria-live="polite" aria-atomic="false"></div>
+    <form id="inputBox" onsubmit="event.preventDefault(); sendMessage();">
+      <input
+        type="text"
+        id="userMessage"
+        placeholder="Tell me your travel plan..."
+        autocomplete="off"
+        aria-label="Type your message"
+        required
+      />
+      <button type="submit" id="sendBtn" aria-label="Send message">Send</button>
+    </form>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>

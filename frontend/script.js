@@ -1,25 +1,56 @@
-document.getElementById("travelForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const dest = document.getElementById("destination").value;
-  const start = document.getElementById("start_date").value;
-  const end = document.getElementById("end_date").value;
-  const interests = document.getElementById("interests").value;
+async function sendMessage() {
+  const input = document.getElementById("userMessage");
+  const sendBtn = document.getElementById("sendBtn");
+  const chatBox = document.getElementById("chatBox");
 
-  const data = { destination: dest, start_date: start, end_date: end, interests };
+  const message = input.value.trim();
+  if (!message) return;
 
-  const itineraryRes = await fetch("/api/itinerary", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
-  const itineraryData = await itineraryRes.json();
-  document.getElementById("itinerary").innerText = itineraryData.itinerary;
+  // Disable input & button while processing
+  input.disabled = true;
+  sendBtn.disabled = true;
+  input.value = "";
 
-  const packingRes = await fetch("/api/packing", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
-  const packingData = await packingRes.json();
-  document.getElementById("packing").innerText = packingData.packing_list;
-});
+  // Add user message with timestamp
+  appendMessage("user", message);
+
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message }),
+    });
+
+    if (!res.ok) throw new Error("Network response was not ok");
+
+    const data = await res.json();
+
+    appendMessage("guide", data.response);
+  } catch (error) {
+    appendMessage("guide", "Sorry, something went wrong. Please try again.");
+  } finally {
+    input.disabled = false;
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+// Helper function to append message bubbles
+function appendMessage(sender, text) {
+  const chatBox = document.getElementById("chatBox");
+  const messageElem = document.createElement("div");
+  messageElem.classList.add("message", sender);
+  messageElem.innerText = text;
+
+  // Timestamp
+  const timeElem = document.createElement("div");
+  timeElem.classList.add("timestamp");
+  const now = new Date();
+  timeElem.innerText = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  messageElem.appendChild(timeElem);
+  chatBox.appendChild(messageElem);
+
+  // Scroll to bottom smoothly
+  chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
+}
