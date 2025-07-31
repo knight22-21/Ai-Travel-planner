@@ -17,13 +17,13 @@ def get_itinerary(request):
         )
     )
 
-    chain = LLMChain(llm=llm, prompt=prompt_template)
+    chain = prompt_template | llm
 
-    response = chain.run({
+    response = chain.invoke({
         "destination": request.destination,
         "start_date": request.start_date,
         "end_date": request.end_date,
         "interests": request.interests
     })
 
-    return response
+    return response.content if hasattr(response, "content") else str(response)
