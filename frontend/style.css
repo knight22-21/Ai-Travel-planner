@@ -174,3 +174,23 @@ button:disabled {
   opacity: 1 !important;
   animation: none !important;
 }
+
+.message.guide ul {
+  padding-left: 1.2em;
+  margin: 0.5em 0;
+}
+
+.message.guide li {
+  margin-bottom: 0.3em;
+}
+
+.message.guide strong {
+  font-weight: bold;
+}
+
+.message.guide h1,
+.message.guide h2,
+.message.guide h3 {
+  margin: 0.4em 0;
+  font-weight: 600;
+}

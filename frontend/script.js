@@ -72,8 +72,11 @@ function appendMessage(sender, text, id = null, isLoading = false) {
 function replaceMessage(id, newText) {
   const messageElem = document.getElementById(id);
   if (messageElem) {
-    messageElem.innerHTML = newText;
+    // Convert Markdown to HTML
+    const html = marked.parse(newText);
+    messageElem.innerHTML = html;
 
+    // Add timestamp
     const timeElem = document.createElement("div");
     timeElem.classList.add("timestamp");
     const now = new Date();
@@ -85,6 +88,7 @@ function replaceMessage(id, newText) {
     messageElem.appendChild(timeElem);
   }
 }
+
 
 // Intro message
 window.onload = () => {
