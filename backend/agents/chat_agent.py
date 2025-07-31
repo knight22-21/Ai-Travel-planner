@@ -4,14 +4,14 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnableSequence
 from config.settings import GROQ_API_KEY
 
-# Core LLM
+# 🔧 Core LLM
 llm = ChatGroq(
-    model="meta-llama/llama-4-maverick-17b-128e-instruct",
+    model="llama-3.3-70b-versatile",
     api_key=GROQ_API_KEY,
     temperature=0.7
 )
 
-# Tool 1: Travel Planning
+# 🌍 Tool 1: Travel Itinerary
 def get_itinerary(place: str) -> str:
     prompt = PromptTemplate(
         input_variables=["place"],
@@ -20,7 +20,7 @@ def get_itinerary(place: str) -> str:
     chain: RunnableSequence = prompt | llm
     return chain.invoke({"place": place})
 
-# Tool 2: Smart Packing
+# 🎒 Tool 2: Smart Packing
 def get_packing_list(destination: str) -> str:
     prompt = PromptTemplate(
         input_variables=["destination"],
@@ -29,7 +29,25 @@ def get_packing_list(destination: str) -> str:
     chain: RunnableSequence = prompt | llm
     return chain.invoke({"destination": destination})
 
-# Define tools
+# 🍜 Tool 3: Local Foods
+def get_local_foods(destination: str) -> str:
+    prompt = PromptTemplate(
+        input_variables=["destination"],
+        template="List the top 5 must-try local dishes and street foods in {destination}."
+    )
+    chain: RunnableSequence = prompt | llm
+    return chain.invoke({"destination": destination})
+
+# 🎉 Tool 4: Local Events
+def get_local_events(destination: str) -> str:
+    prompt = PromptTemplate(
+        input_variables=["destination"],
+        template="List famous festivals or events in {destination} happening throughout the year."
+    )
+    chain: RunnableSequence = prompt | llm
+    return chain.invoke({"destination": destination})
+
+# 🧰 Define tools
 tools = [
     Tool(
         name="TravelPlanner",
@@ -41,9 +59,19 @@ tools = [
         func=get_packing_list,
         description="Use this tool when the user asks what to pack OR when they're planning a trip and might need packing advice for the destination."
     ),
+    Tool(
+        name="LocalFoodAdvisor",
+        func=get_local_foods,
+        description="Use this tool when the user wants to know about local dishes or street food to try in a destination."
+    ),
+    Tool(
+        name="LocalEventsFinder",
+        func=get_local_events,
+        description="Use this tool when the user wants to know about cultural festivals or major events in a place."
+    ),
 ]
 
-# Create agent
+# 🧠 Agent with tools
 agent_executor = initialize_agent(
     tools=tools,
     llm=llm,
@@ -51,6 +79,6 @@ agent_executor = initialize_agent(
     verbose=True
 )
 
-# Main function for chat message
+# 💬 Main function for chat
 def get_chat_response(message: str) -> str:
     return agent_executor.run(message)
