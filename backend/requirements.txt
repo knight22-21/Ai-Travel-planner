@@ -5,3 +5,4 @@ python-dotenv
 httpx
 pytest
 langchain_groq
+reportlab

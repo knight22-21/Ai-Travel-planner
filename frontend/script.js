@@ -1,3 +1,5 @@
+let chatHistory = []; // Track messages for PDF
+
 async function sendMessage() {
   const input = document.getElementById("userMessage");
   const sendBtn = document.getElementById("sendBtn");
@@ -13,6 +15,7 @@ async function sendMessage() {
 
   // Add user message with timestamp
   appendMessage("user", message);
+  chatHistory.push({ role: "user", content: message });
 
   // Add loading indicator
   const loaderId = "loading-" + Date.now();
@@ -31,8 +34,12 @@ async function sendMessage() {
 
     // Replace loader with actual response
     replaceMessage(loaderId, data.response);
+    chatHistory.push({ role: "guide", content: data.response });
+
   } catch (error) {
-    replaceMessage(loaderId, "❌ Sorry, something went wrong. Please try again.");
+    const errorMsg = "❌ Sorry, something went wrong. Please try again.";
+    replaceMessage(loaderId, errorMsg);
+    chatHistory.push({ role: "guide", content: errorMsg });
   } finally {
     input.disabled = false;
     sendBtn.disabled = false;
@@ -48,9 +55,8 @@ function appendMessage(sender, text, id = null, isLoading = false) {
 
   // Show loading animation if applicable
   messageElem.innerHTML = isLoading
-   ? `<div class="dots"><span>.</span><span>.</span><span>.</span></div>`
-   : text;
-
+    ? `<div class="dots"><span>.</span><span>.</span><span>.</span></div>`
+    : marked.parse(text); // Markdown support
 
   // Timestamp
   if (!isLoading) {
@@ -68,7 +74,6 @@ function appendMessage(sender, text, id = null, isLoading = false) {
   chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
 }
 
-// Replace loader with actual response
 function replaceMessage(id, newText) {
   const messageElem = document.getElementById(id);
   if (messageElem) {
@@ -89,8 +94,37 @@ function replaceMessage(id, newText) {
   }
 }
 
+// Handle PDF download
+document.getElementById("downloadBtn").addEventListener("click", async () => {
+  if (chatHistory.length === 0) {
+    alert("No chat history to download.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/v1/pdf", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ history: chatHistory })
+    });
+
+    if (!response.ok) throw new Error("Failed to download PDF");
+
+    const blob = await response.blob();
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "chat_history.pdf";
+    link.click();
+  } catch (err) {
+    console.error("PDF download failed:", err);
+    alert("Failed to generate PDF. Please try again.");
+  }
+});
 
 // Intro message
 window.onload = () => {
   appendMessage("guide", "👋 Hi! I’m your AI Travel Guide. Tell me your travel plans.");
+  chatHistory.push({ role: "guide", content: "👋 Hi! I’m your AI Travel Guide. Tell me your travel plans." });
 };
