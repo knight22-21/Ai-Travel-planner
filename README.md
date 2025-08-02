@@ -1,5 +1,5 @@
 
-# 🌍 IntelliTrip — Your AI-Powered Travel Planner
+# 🌍 IntelliTrip — Your AI-Powered Travel Planner 
 
 **IntelliTrip** is an intelligent, interactive travel planning assistant built with **FastAPI** and **LangChain Agents**, leveraging the **Groq API** for lightning-fast LLM responses. It helps users with end-to-end trip planning: from itinerary creation and packing lists to local food and event recommendations — all in a sleek web UI.
 
