@@ -154,5 +154,3 @@ Includes a basic GitHub Actions workflow for:
 ## 📜 License
 
 This project is licensed under the [MIT License](LICENSE).
-
-```
