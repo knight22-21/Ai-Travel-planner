@@ -26,7 +26,15 @@
 
 ## Screenshots
 
-> Add images here from `/frontend` (chat interface, response examples, etc.)
+### 🗺️ Workflow
+<img src="assets/workflow.png" alt="Workflow" width="400"/>
+
+### 🧭 Chat Interface
+<img src="assets/Chat_interface.png" alt="Chat Interface" width="700"/>
+
+### 🗺️ Pdf Sample
+<img src="assets/pdf_look.png" alt="PDF Sample" width="800"/>
+
 
 ---
 
